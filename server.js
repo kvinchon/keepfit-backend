@@ -33,10 +33,10 @@ function setRoles() {
   });
 }
 
-db.sequelize.sync({ force: true }).then(() => {
+/* db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and resync database...");
   setRoles();
-});
+}); */
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
