@@ -40,6 +40,8 @@ module.exports = (app) => {
    *              type: string
    *            userId:
    *              type: number
+   *    security:
+   *      - bearerAuth: []
    *    responses:
    *      '200':
    *        description: OK
