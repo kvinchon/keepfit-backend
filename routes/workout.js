@@ -50,7 +50,11 @@ module.exports = (app) => {
    *      '500':
    *        description: Internal Server Error
    */
-   router.post("/", workoutController.create);
+  router.post(
+    "/",
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
+    workoutController.create
+  );
 
   /**
    * @swagger
@@ -67,7 +71,7 @@ module.exports = (app) => {
    */
   router.get(
     "/",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     workoutController.findAll
   );
 
@@ -93,7 +97,7 @@ module.exports = (app) => {
    */
   router.get(
     "/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     workoutController.findOne
   );
 
@@ -139,7 +143,7 @@ module.exports = (app) => {
    */
   router.put(
     "/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     workoutController.update
   );
 

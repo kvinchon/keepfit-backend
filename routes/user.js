@@ -19,7 +19,7 @@ module.exports = (app) => {
    */
   router.get(
     "/",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     userController.findAll
   );
 
@@ -45,7 +45,7 @@ module.exports = (app) => {
    */
   router.get(
     "/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     userController.findOne
   );
 
@@ -71,7 +71,7 @@ module.exports = (app) => {
    */
    router.get(
     "/:id/workouts",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     userController.findWorkouts
   );
 
@@ -97,7 +97,7 @@ module.exports = (app) => {
    */
    router.get(
     "/:id/stats",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     userController.findStats
   );
 
@@ -144,7 +144,7 @@ module.exports = (app) => {
    */
   router.put(
     "/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     userController.update
   );
 

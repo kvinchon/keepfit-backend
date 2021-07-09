@@ -38,7 +38,7 @@ module.exports = (app) => {
    */
   router.get(
     "/",
-    [authJwt.verifyToken, authJwt.isAdmin],
+    [authJwt.verifyToken, authJwt.isPublicOrAdmin],
     directionController.find
   );
 
