@@ -1,14 +1,60 @@
 const { authJwt } = require("../middlewares");
-const userController = require("../controllers/userController.js");
+const workoutController = require("../controllers/workoutController.js");
 
 var router = require("express").Router();
 
 module.exports = (app) => {
   /**
    * @swagger
-   * /api/users:
+   * /api/workouts:
+   *  post:
+   *    description: Create a Workout
+   *    consumes:
+   *      - application/json
+   *    parameters:
+   *      - in: body
+   *        name: workout
+   *        description: The workout to create
+   *        schema:
+   *          type: object
+   *          required:
+   *            - mode
+   *            - distance
+   *            - duration
+   *            - coordinates
+   *            - startingPoint
+   *            - endingPoint
+   *            - userId
+   *          properties:
+   *            mode:
+   *              type: string
+   *            distance:
+   *              type: number
+   *            duration:
+   *              type: number
+   *            coordinates:
+   *              type: string
+   *            startingPoint:
+   *              type: string
+   *            endingPoint:
+   *              type: string
+   *            userId:
+   *              type: number
+   *    responses:
+   *      '200':
+   *        description: OK
+   *      '400':
+   *        description: Bad Request
+   *      '500':
+   *        description: Internal Server Error
+   */
+   router.post("/", workoutController.create);
+
+  /**
+   * @swagger
+   * /api/workouts:
    *  get:
-   *    description: Retrieve all Users
+   *    description: Retrieve all Workouts
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -20,19 +66,19 @@ module.exports = (app) => {
   router.get(
     "/",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findAll
+    workoutController.findAll
   );
 
   /**
    * @swagger
-   * /api/users/{id}:
+   * /api/workouts/{id}:
    *  get:
    *    parameters:
    *    - in: path
    *      name: id
    *      required: true
-   *      description: The user ID
-   *    description: Retrieve a single User with id
+   *      description: The workout ID
+   *    description: Retrieve a single Workout with id
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -46,92 +92,39 @@ module.exports = (app) => {
   router.get(
     "/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findOne
+    workoutController.findOne
   );
 
   /**
    * @swagger
-   * /api/users/{id}/workouts:
-   *  get:
-   *    parameters:
-   *    - in: path
-   *      name: id
-   *      required: true
-   *      description: The user ID
-   *    description: Retrieve user's Workouts with id
-   *    security:
-   *      - bearerAuth: []
-   *    responses:
-   *      '200':
-   *        description: OK
-   *      '400':
-   *        description: Bad Request
-   *      '500':
-   *        description: Internal Server Error
-   */
-   router.get(
-    "/:id/workouts",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findWorkouts
-  );
-
-  /**
-   * @swagger
-   * /api/users/{id}/stats:
-   *  get:
-   *    parameters:
-   *    - in: path
-   *      name: id
-   *      required: true
-   *      description: The user ID
-   *    description: Retrieve user's Stats with id
-   *    security:
-   *      - bearerAuth: []
-   *    responses:
-   *      '200':
-   *        description: OK
-   *      '400':
-   *        description: Bad Request
-   *      '500':
-   *        description: Internal Server Error
-   */
-   router.get(
-    "/:id/stats",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findStats
-  );
-
-  /**
-   * @swagger
-   * /api/users/{id}:
+   * /api/workouts/{id}:
    *  put:
-   *    description: Update a User with id
+   *    description: Update a Workout with id
    *    parameters:
    *    - in: path
    *      name: id
    *      required: true
-   *      description: The user ID
+   *      description: The workout ID
    *    - in: body
    *      name: user
-   *      description: The user information to update
+   *      description: The workout information to update
    *      schema:
    *        type: object
    *        properties:
-   *          firstName:
+   *          mode:
    *            type: string
-   *          lastName:
+   *          distance:
+   *            type: number
+   *          duration:
+   *            type: number
+   *          coordinates:
    *            type: string
-   *          email:
+   *          startingPoint:
    *            type: string
-   *          password:
+   *          endingPoint:
    *            type: string
-   *          roles:
-   *            type: array
-   *            items:
-   *              type: string
-   *              enum:
-   *                - public
-   *                - admin
+   *          userId:
+   *            type: number
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -145,19 +138,19 @@ module.exports = (app) => {
   router.put(
     "/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.update
+    workoutController.update
   );
 
   /**
    * @swagger
-   * /api/users/{id}:
+   * /api/workouts/{id}:
    *  delete:
    *    parameters:
    *    - in: path
    *      name: id
    *      required: true
-   *      description: The user ID
-   *    description: Delete a User with id
+   *      description: The workout ID
+   *    description: Delete a Workout with id
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -171,14 +164,14 @@ module.exports = (app) => {
   router.delete(
     "/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.delete
+    workoutController.delete
   );
 
   /**
    * @swagger
-   * /api/users:
+   * /api/workouts:
    *  delete:
-   *    description: Delete all Users
+   *    description: Delete all Workouts
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -190,7 +183,7 @@ module.exports = (app) => {
   router.delete(
     "/",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.deleteAll
+    workoutController.deleteAll
   );
 
   app.use(function (req, res, next) {
@@ -201,5 +194,5 @@ module.exports = (app) => {
     next();
   });
 
-  app.use("/api/users", router);
+  app.use("/api/workouts", router);
 };

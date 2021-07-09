@@ -2,6 +2,7 @@ const db = require("../models");
 const config = require("../config/auth.js");
 const User = db.User;
 const Role = db.Role;
+const Preference = db.Preference;
 
 const Op = db.Sequelize.Op;
 
@@ -42,6 +43,8 @@ exports.register = (req, res) => {
           res.send({ message: "User was successfully registered." });
         });
       }
+      // default preferences
+      Preference.create({ type: 'duration', value: 30, mode: 'walking', userId: user.dataValues.id});
     })
     .catch((err) => {
       res.status(500).send({ message: err.message });
@@ -95,6 +98,10 @@ exports.login = (req, res) => {
       });
 
       var authorities = [];
+      var preferences = {};
+      user.getPreference().then((p) => {
+        preferences = {...p.dataValues}
+      })
       user.getRoles().then((roles) => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
@@ -105,7 +112,8 @@ exports.login = (req, res) => {
           lastName: user.lastName,
           email: user.email,
           roles: authorities,
-          accessToken: token,
+          preferences: preferences,
+          accessToken: token
         });
       });
     })

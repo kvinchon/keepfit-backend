@@ -1,14 +1,14 @@
 const { authJwt } = require("../middlewares");
-const userController = require("../controllers/userController.js");
+const preferenceController = require("../controllers/preferenceController.js");
 
 var router = require("express").Router();
 
 module.exports = (app) => {
   /**
    * @swagger
-   * /api/users:
+   * /api/preferences:
    *  get:
-   *    description: Retrieve all Users
+   *    description: Retrieve all Preferences
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -20,19 +20,19 @@ module.exports = (app) => {
   router.get(
     "/",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findAll
+    preferenceController.findAll
   );
 
   /**
    * @swagger
-   * /api/users/{id}:
+   * /api/preferences/{id}:
    *  get:
    *    parameters:
    *    - in: path
    *      name: id
    *      required: true
-   *      description: The user ID
-   *    description: Retrieve a single User with id
+   *      description: The preference ID
+   *    description: Retrieve a single Preference with id
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -46,92 +46,33 @@ module.exports = (app) => {
   router.get(
     "/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findOne
+    preferenceController.findOne
   );
 
   /**
    * @swagger
-   * /api/users/{id}/workouts:
-   *  get:
-   *    parameters:
-   *    - in: path
-   *      name: id
-   *      required: true
-   *      description: The user ID
-   *    description: Retrieve user's Workouts with id
-   *    security:
-   *      - bearerAuth: []
-   *    responses:
-   *      '200':
-   *        description: OK
-   *      '400':
-   *        description: Bad Request
-   *      '500':
-   *        description: Internal Server Error
-   */
-   router.get(
-    "/:id/workouts",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findWorkouts
-  );
-
-  /**
-   * @swagger
-   * /api/users/{id}/stats:
-   *  get:
-   *    parameters:
-   *    - in: path
-   *      name: id
-   *      required: true
-   *      description: The user ID
-   *    description: Retrieve user's Stats with id
-   *    security:
-   *      - bearerAuth: []
-   *    responses:
-   *      '200':
-   *        description: OK
-   *      '400':
-   *        description: Bad Request
-   *      '500':
-   *        description: Internal Server Error
-   */
-   router.get(
-    "/:id/stats",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    userController.findStats
-  );
-
-  /**
-   * @swagger
-   * /api/users/{id}:
+   * /api/preferences/{id}:
    *  put:
-   *    description: Update a User with id
+   *    description: Update a Preference with id
    *    parameters:
    *    - in: path
    *      name: id
    *      required: true
-   *      description: The user ID
+   *      description: The preference ID
    *    - in: body
-   *      name: user
-   *      description: The user information to update
+   *      name: preference
+   *      description: The preference information to update
    *      schema:
    *        type: object
    *        properties:
-   *          firstName:
+   *          type:
    *            type: string
-   *          lastName:
+   *          value:
+   *            type: number
+   *          mode:
    *            type: string
-   *          email:
-   *            type: string
-   *          password:
-   *            type: string
-   *          roles:
-   *            type: array
-   *            items:
-   *              type: string
-   *              enum:
-   *                - public
-   *                - admin
+   *          userId:
+   *            type: number
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -145,19 +86,19 @@ module.exports = (app) => {
   router.put(
     "/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.update
+    preferenceController.update
   );
 
   /**
    * @swagger
-   * /api/users/{id}:
+   * /api/preferences/{id}:
    *  delete:
    *    parameters:
    *    - in: path
    *      name: id
    *      required: true
-   *      description: The user ID
-   *    description: Delete a User with id
+   *      description: The preference ID
+   *    description: Delete a Preference with id
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -171,14 +112,14 @@ module.exports = (app) => {
   router.delete(
     "/:id",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.delete
+    preferenceController.delete
   );
 
   /**
    * @swagger
-   * /api/users:
+   * /api/preferences:
    *  delete:
-   *    description: Delete all Users
+   *    description: Delete all Preferences
    *    security:
    *      - bearerAuth: []
    *    responses:
@@ -190,7 +131,7 @@ module.exports = (app) => {
   router.delete(
     "/",
     [authJwt.verifyToken, authJwt.isAdmin],
-    userController.deleteAll
+    preferenceController.deleteAll
   );
 
   app.use(function (req, res, next) {
@@ -201,5 +142,5 @@ module.exports = (app) => {
     next();
   });
 
-  app.use("/api/users", router);
+  app.use("/api/preferences", router);
 };

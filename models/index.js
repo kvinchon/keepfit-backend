@@ -25,6 +25,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.User = require("./User.js")(sequelize, Sequelize);
+db.Preference = require("./Preference.js")(sequelize, Sequelize);
+db.Workout = require("./Workout.js")(sequelize, Sequelize);
 db.Role = require("./Role.js")(sequelize, Sequelize);
 
 db.Role.belongsToMany(db.User, {
@@ -37,6 +39,10 @@ db.User.belongsToMany(db.Role, {
   foreignKey: "userId",
   otherKey: "roleId",
 });
+db.User.hasOne(db.Preference)
+db.Preference.belongsTo(db.User)
+
+db.User.hasMany(db.Workout)
 
 db.ROLES = ["public", "admin"];
 

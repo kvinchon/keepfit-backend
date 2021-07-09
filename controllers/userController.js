@@ -1,5 +1,7 @@
 const db = require("../models");
 const User = db.User;
+const Workout = db.Workout;
+const sequelize = db.sequelize;
 
 // Retrieve all Users from the database.
 exports.findAll = (req, res) => {
@@ -31,6 +33,62 @@ exports.findOne = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         message: "Error retrieving user with id=" + id,
+      });
+    });
+};
+
+// Find user's Workouts with an id
+exports.findWorkouts = (req, res) => {
+  const id = req.params.id;
+
+  Workout.findAll({
+    where: { userId: id },
+    order: [["createdAt", "DESC"]],
+    limit: 5,
+  })
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(400).send({
+          message: `Error retrieving workouts with userId=${id}. Maybe workout was not found or req.params.id is empty.`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error retrieving workout with userId=" + id,
+      });
+    });
+};
+
+// Find user's Workouts with an id
+exports.findStats = (req, res) => {
+  const id = req.params.id;
+
+  Workout.findAll({
+    where: { userId: id },
+    attributes: [
+      [sequelize.fn("sum", sequelize.col("distance")), "totalDistance"],
+      [sequelize.fn("sum", sequelize.col("duration")), "totalDuration"],
+      [sequelize.fn("avg", sequelize.col("distance")), "avgDistance"],
+      [sequelize.fn("avg", sequelize.col("duration")), "avgDuration"],
+      [sequelize.fn("max", sequelize.col("duration")), "maxDuration"],
+      [sequelize.fn("max", sequelize.col("distance")), "maxDistance"],
+    ],
+  })
+    .then((data) => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(400).send({
+          message: `Error retrieving stats with userId=${id}. Maybe stats was not found or req.params.id is empty.`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error retrieving stats with userId=" + id,
       });
     });
 };

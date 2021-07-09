@@ -63,6 +63,9 @@ app.get("/", (req, res) => {
 // routes
 require("./routes/auth")(app);
 require("./routes/user")(app);
+require("./routes/preference")(app);
+require("./routes/direction")(app);
+require("./routes/workout")(app);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
