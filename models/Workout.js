@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     coordinates: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(512),
       allowNull: false,
     },
     startingPoint: {
